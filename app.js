@@ -849,9 +849,6 @@ function importBackup(file) {
 function initApp() {
   loadState();
 
-  document.getElementById('prevDayBtn').addEventListener('click', () => {
-    selectDate(addDays(state.selectedDate, -1));
-
   const headerActions = document.querySelector('.header-actions');
   if (headerActions) {
     const keyBtn = document.createElement('button');
@@ -869,6 +866,10 @@ function initApp() {
       }
     });
     headerActions.prepend(keyBtn);
+  }
+
+  document.getElementById('prevDayBtn').addEventListener('click', () => {
+    selectDate(addDays(state.selectedDate, -1));
   });
 
   document.getElementById('nextDayBtn').addEventListener('click', () => {
