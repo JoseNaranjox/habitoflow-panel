@@ -20,7 +20,13 @@ const firebaseConfig = {
 };
 
 // Cambia este identificador por uno secreto tuyo (debe ser el mismo en todos tus dispositivos)
-const USER_SYNC_ID = 'mi_panel_personal_clave_secreta';
+let USER_SYNC_ID = localStorage.getItem('habitflow_sync_key');
+if (!USER_SYNC_ID) {
+  USER_SYNC_ID = prompt('Introduce tu clave secreta de sincronización:');
+  if (USER_SYNC_ID) {
+    localStorage.setItem('habitflow_sync_key', USER_SYNC_ID.trim());
+  }
+}
 
 // Comprobación automática de si Firebase ya está configurado con tus datos reales
 const isCloudEnabled =
