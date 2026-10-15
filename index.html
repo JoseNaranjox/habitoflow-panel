@@ -1,1279 +1,277 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>TechNova | Official Computer & Hardware Store</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HabitFlow Pro — Panel Diario de Hábitos</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #f4f7f9;
-      --surface: #ffffff;
-      --surface-alt: #edf2f6;
-      --ink: #0f172a;
-      --mute: #475569;
-      --line: #e2e8f0;
-      --acc: #0d9488;
-      --acc-hover: #0f766e;
-      --acc-ink: #ffffff;
-      --acc-soft: rgba(13, 148, 136, 0.1);
-      --hot: #f59e0b;
-      --hot-ink: #1e1b18;
-      --danger: #ef4444;
-      --success: #10b981;
-      --hero-bg: #0f172a;
-      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
-      --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
-      --shadow-lg: 0 20px 35px -10px rgba(15, 23, 42, 0.15);
-      --radius: 16px;
-    }
-
-    :root[data-theme="dark"] {
-      --bg: #0b1120;
-      --surface: #1e293b;
-      --surface-alt: #0f172a;
-      --ink: #f8fafc;
-      --mute: #94a3b8;
-      --line: #334155;
-      --acc: #14b8a6;
-      --acc-hover: #2dd4bf;
-      --acc-ink: #042f2e;
-      --acc-soft: rgba(20, 184, 166, 0.15);
-      --hot: #fbbf24;
-      --hot-ink: #1e1b18;
-      --hero-bg: #020617;
-      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-      --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
-      --shadow-lg: 0 20px 35px -10px rgba(0, 0, 0, 0.6);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-padding-top: 90px;
-      scroll-behavior: smooth;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--ink);
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      font-size: 16px;
-      line-height: 1.5;
-      transition: background 0.25s ease, color 0.25s ease;
-    }
-
-    /* Top Announcement Bar */
-    .topbar {
-      background: var(--hero-bg);
-      color: #cbd5e1;
-      font-size: 13px;
-      font-weight: 500;
-      padding: 8px 5vw;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .topbar-in {
-      max-width: 1280px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .topbar-badges {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-    }
-
-    .topbar-badges span {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--success);
-      display: inline-block;
-    }
-
-    /* Main Header */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 40;
-      background: color-mix(in srgb, var(--surface) 88%, transparent);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--line);
-      padding: 14px 5vw;
-    }
-
-    .header-in {
-      max-width: 1280px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .logo {
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--ink);
-      text-decoration: none;
-    }
-
-    .logo-badge {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--acc), #2563eb);
-      display: grid;
-      place-items: center;
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
-    }
-
-    .logo span {
-      color: var(--acc);
-    }
-
-    .search-wrap {
-      flex: 1;
-      min-width: 220px;
-      max-width: 440px;
-      position: relative;
-    }
-
-    .search-wrap input {
-      width: 100%;
-      padding: 10px 16px 10px 40px;
-      border-radius: 99px;
-      border: 1px solid var(--line);
-      background: var(--surface-alt);
-      color: var(--ink);
-      font: inherit;
-      font-size: 14px;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .search-wrap input:focus {
-      border-color: var(--acc);
-      box-shadow: 0 0 0 3px var(--acc-soft);
-    }
-
-    .search-wrap svg {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 18px;
-      height: 18px;
-      color: var(--mute);
-      pointer-events: none;
-    }
-
-    nav {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-left: auto;
-    }
-
-    nav a {
-      color: var(--ink);
-      text-decoration: none;
-      padding: 8px 14px;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 14px;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    nav a:hover {
-      background: var(--acc-soft);
-      color: var(--acc);
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .icon-btn {
-      background: var(--surface-alt);
-      color: var(--ink);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 9px 12px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font: inherit;
-      font-weight: 600;
-      font-size: 14px;
-      transition: all 0.2s;
-    }
-
-    .icon-btn:hover {
-      border-color: var(--acc);
-      color: var(--acc);
-    }
-
-    .cart-count {
-      background: var(--acc);
-      color: var(--acc-ink);
-      font-size: 12px;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 99px;
-    }
-
-    /* Hero Section */
-    .hero {
-      background: radial-gradient(circle at 80% 20%, #1e293b 0%, var(--hero-bg) 70%);
-      color: #f8fafc;
-      position: relative;
-      overflow: hidden;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .hero-in {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 64px 5vw;
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 40px;
-      align-items: center;
-    }
-
-    @media (max-width: 860px) {
-      .hero-in {
-        grid-template-columns: 1fr;
-        padding: 40px 5vw;
-      }
-    }
-
-    .hero-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(20, 184, 166, 0.15);
-      border: 1px solid rgba(20, 184, 166, 0.4);
-      color: #5eead4;
-      padding: 6px 14px;
-      border-radius: 99px;
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 18px;
-    }
-
-    .hero h1 {
-      font-size: clamp(34px, 5vw, 56px);
-      font-weight: 800;
-      line-height: 1.08;
-      letter-spacing: -1px;
-      margin-bottom: 18px;
-    }
-
-    .hero h1 span {
-      background: linear-gradient(90deg, #2dd4bf, #60a5fa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero p {
-      font-size: 18px;
-      color: #94a3b8;
-      max-width: 54ch;
-      margin-bottom: 28px;
-    }
-
-    .hero-btns {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-bottom: 32px;
-    }
-
-    .btn-primary {
-      background: var(--acc);
-      color: var(--acc-ink);
-      padding: 13px 26px;
-      border-radius: 12px;
-      font-weight: 700;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border: none;
-      cursor: pointer;
-      font-size: 15px;
-      transition: transform 0.15s, background 0.2s;
-    }
-
-    .btn-primary:hover {
-      background: var(--acc-hover);
-      transform: translateY(-2px);
-    }
-
-    .btn-hot {
-      background: var(--hot);
-      color: var(--hot-ink);
-      padding: 13px 26px;
-      border-radius: 12px;
-      font-weight: 700;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 15px;
-      transition: transform 0.15s, filter 0.2s;
-    }
-
-    .btn-hot:hover {
-      filter: brightness(1.05);
-      transform: translateY(-2px);
-    }
-
-    .hero-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      padding-top: 24px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .stat-num {
-      font-size: 22px;
-      font-weight: 800;
-      color: #fff;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .stat-lbl {
-      font-size: 13px;
-      color: #94a3b8;
-    }
-
-    .hero-showcase {
-      position: relative;
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 24px;
-      padding: 20px;
-      box-shadow: var(--shadow-lg);
-    }
-
-    .hero-showcase img {
-      width: 100%;
-      height: 310px;
-      object-fit: cover;
-      border-radius: 16px;
-      display: block;
-    }
-
-    .floating-card {
-      position: absolute;
-      bottom: -14px;
-      left: 24px;
-      right: 24px;
-      background: rgba(15, 23, 42, 0.92);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 14px;
-      padding: 12px 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-    }
-
-    /* Main Container */
-    .in {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 5vw;
-    }
-
-    section {
-      padding: 64px 0;
-    }
-
-    .sec-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-
-    .sec-tag {
-      color: var(--acc);
-      font-weight: 700;
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 4px;
-      display: block;
-    }
-
-    h2 {
-      font-size: clamp(26px, 3.5vw, 36px);
-      font-weight: 800;
-      letter-spacing: -0.5px;
-    }
-
-    /* Controls Bar: Filters + Sort */
-    .controls-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-bottom: 28px;
-    }
-
-    .filters {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .filters button {
-      font: inherit;
-      font-size: 14px;
-      font-weight: 600;
-      background: var(--surface);
-      color: var(--mute);
-      border: 1px solid var(--line);
-      border-radius: 99px;
-      padding: 8px 16px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
-    }
-
-    .filters button:hover {
-      border-color: var(--acc);
-      color: var(--ink);
-    }
-
-    .filters button[aria-pressed="true"] {
-      background: var(--acc);
-      color: var(--acc-ink);
-      border-color: var(--acc);
-      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
-    }
-
-    .cat-count {
-      font-size: 11px;
-      opacity: 0.8;
-      background: rgba(0, 0, 0, 0.12);
-      padding: 1px 6px;
-      border-radius: 99px;
-    }
-
-    .sort-select {
-      padding: 8px 14px;
-      border-radius: 10px;
-      border: 1px solid var(--line);
-      background: var(--surface);
-      color: var(--ink);
-      font: inherit;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    /* Product Grid */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 24px;
-    }
-
-    .pc {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      box-shadow: var(--shadow-sm);
-      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
-      position: relative;
-    }
-
-    .pc:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-md);
-      border-color: var(--acc);
-    }
-
-    .img-wrap {
-      position: relative;
-      height: 195px;
-      background: var(--surface-alt);
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .img-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.35s ease;
-    }
-
-    .pc:hover .img-wrap img {
-      transform: scale(1.05);
-    }
-
-    .img-wrap svg {
-      width: 120px;
-      height: 90px;
-    }
-
-    .stock-pill {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: rgba(15, 23, 42, 0.82);
-      backdrop-filter: blur(6px);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 99px;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .tier-badge {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 99px;
-      color: #fff;
-    }
-
-    .pb {
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      flex: 1;
-    }
-
-    .pb-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12px;
-    }
-
-    .cat {
-      color: var(--acc);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .rating {
-      color: #f59e0b;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .rating span {
-      color: var(--mute);
-      font-weight: 500;
-    }
-
-    .pb h3 {
-      font-size: 19px;
-      font-weight: 700;
-      line-height: 1.25;
-    }
-
-    .spec-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin: 2px 0;
-    }
-
-    .spec-chip {
-      font-size: 12px;
-      background: var(--surface-alt);
-      color: var(--mute);
-      border: 1px solid var(--line);
-      padding: 3px 9px;
-      border-radius: 6px;
-      font-weight: 500;
-    }
-
-    .tg {
-      font-size: 12.5px;
-      background: var(--acc-soft);
-      color: var(--acc);
-      border-radius: 8px;
-      padding: 6px 10px;
-      font-weight: 600;
-      margin-top: auto;
-    }
-
-    .pb-foot {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 12px;
-      border-top: 1px solid var(--line);
-      margin-top: 4px;
-    }
-
-    .pr-wrap {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .pr {
-      font-size: 24px;
-      font-weight: 800;
-      font-family: 'JetBrains Mono', monospace;
-      line-height: 1;
-    }
-
-    .vat {
-      font-size: 11px;
-      color: var(--mute);
-    }
-
-    .add-btn {
-      background: var(--ink);
-      color: var(--surface);
-      border: none;
-      border-radius: 10px;
-      padding: 9px 14px;
-      font: inherit;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: background 0.2s, transform 0.15s;
-    }
-
-    .add-btn:hover {
-      background: var(--acc);
-      color: var(--acc-ink);
-      transform: scale(1.03);
-    }
-
-    /* Customer Profiles & Recommendations */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 24px;
-    }
-
-    .cu {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 26px;
-      display: flex;
-      flex-direction: column;
-      box-shadow: var(--shadow-sm);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .cu::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 5px;
-      background: var(--cu-color, var(--acc));
-    }
-
-    .cu-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 16px;
-    }
-
-    .avatar {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      font-weight: 800;
-      font-size: 20px;
-      color: #fff;
-      flex-shrink: 0;
-    }
-
-    .cu h3 {
-      font-size: 20px;
-      font-weight: 800;
-    }
-
-    .who {
-      color: var(--mute);
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .cu ul {
-      list-style: none;
-      margin: 8px 0 16px;
-      background: var(--surface-alt);
-      border-radius: 12px;
-      padding: 8px 14px;
-      border: 1px solid var(--line);
-    }
-
-    .cu li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 0;
-      border-bottom: 1px solid var(--line);
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .cu li:last-child {
-      border-bottom: none;
-    }
-
-    .cu li svg {
-      width: 36px;
-      height: 28px;
-      flex: none;
-      border-radius: 6px;
-      background: var(--surface);
-      padding: 3px;
-      border: 1px solid var(--line);
-    }
-
-    .cu li span {
-      margin-left: auto;
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 700;
-      color: var(--acc);
-    }
-
-    .why-box {
-      background: var(--acc-soft);
-      border-left: 4px solid var(--cu-color, var(--acc));
-      padding: 14px;
-      border-radius: 0 10px 10px 0;
-      margin-bottom: 18px;
-      flex: 1;
-    }
-
-    .why-title {
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--ink);
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .why {
-      font-size: 14px;
-      color: var(--ink);
-      line-height: 1.55;
-    }
-
-    .why strong {
-      color: var(--acc);
-      font-weight: 700;
-    }
-
-    .cu-foot {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 14px;
-      border-top: 1px solid var(--line);
-    }
-
-    .tot-lbl {
-      font-size: 12px;
-      color: var(--mute);
-      display: block;
-    }
-
-    .tot {
-      font-weight: 800;
-      font-size: 24px;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* Back to School Promo Pack */
-    .promo {
-      background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 60%, #042f2e 100%);
-      color: #fff;
-      border-radius: 24px;
-      padding: 44px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: var(--shadow-lg);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-    }
-
-    .promo-grid {
-      display: grid;
-      grid-template-columns: 1.3fr 0.7fr;
-      gap: 32px;
-      align-items: center;
-    }
-
-    @media (max-width: 860px) {
-      .promo {
-        padding: 28px;
-      }
-      .promo-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .promo-badge {
-      display: inline-block;
-      background: var(--hot);
-      color: var(--hot-ink);
-      font-weight: 800;
-      font-size: 12px;
-      padding: 5px 12px;
-      border-radius: 99px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 14px;
-    }
-
-    .promo h2 {
-      font-size: clamp(28px, 4vw, 42px);
-      margin-bottom: 10px;
-    }
-
-    .promo-sub {
-      color: #cbd5e1;
-      margin-bottom: 24px;
-      font-size: 16px;
-    }
-
-    .promo ul {
-      list-style: none;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .promo li {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      border-radius: 14px;
-      padding: 12px;
-      font-size: 14px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .promo li svg {
-      width: 44px;
-      height: 34px;
-      flex-shrink: 0;
-    }
-
-    .promo-price-card {
-      background: rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      border-radius: 20px;
-      padding: 28px;
-      text-align: center;
-    }
-
-    .old {
-      text-decoration: line-through;
-      color: #94a3b8;
-      font-size: 18px;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .new {
-      font-size: 54px;
-      font-weight: 800;
-      color: var(--hot);
-      font-family: 'JetBrains Mono', monospace;
-      line-height: 1.05;
-      margin: 8px 0;
-    }
-
-    .save-pill {
-      display: inline-block;
-      background: rgba(16, 185, 129, 0.2);
-      border: 1px solid #10b981;
-      color: #6ee7b7;
-      font-weight: 700;
-      font-size: 14px;
-      padding: 4px 14px;
-      border-radius: 99px;
-      margin-bottom: 20px;
-    }
-
-    /* Slide-out Cart Drawer */
-    .cart-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.6);
-      backdrop-filter: blur(4px);
-      z-index: 90;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s ease;
-    }
-
-    .cart-overlay.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .cart-drawer {
-      position: fixed;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      width: min(420px, 92vw);
-      background: var(--surface);
-      z-index: 100;
-      box-shadow: var(--shadow-lg);
-      display: flex;
-      flex-direction: column;
-      transform: translateX(100%);
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .cart-overlay.open .cart-drawer {
-      transform: translateX(0);
-    }
-
-    .cart-head {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--line);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .cart-items {
-      padding: 20px 24px;
-      overflow-y: auto;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .cart-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px;
-      border-radius: 12px;
-      background: var(--surface-alt);
-      border: 1px solid var(--line);
-      font-size: 14px;
-    }
-
-    .cart-foot {
-      padding: 20px 24px;
-      border-top: 1px solid var(--line);
-      background: var(--surface-alt);
-    }
-
-    /* Footer */
-    footer {
-      background: var(--hero-bg);
-      color: #94a3b8;
-      padding: 56px 5vw 32px;
-      font-size: 14px;
-      border-top: 1px solid var(--line);
-    }
-
-    .footer-in {
-      max-width: 1280px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 32px;
-      margin-bottom: 36px;
-    }
-
-    .footer-col h4 {
-      color: #fff;
-      font-size: 15px;
-      margin-bottom: 14px;
-    }
-
-    .footer-col ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .footer-bottom {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding-top: 24px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Fallback Hardware SVG Sprites -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <symbol id="laptop" viewBox="0 0 120 90"><rect x="22" y="10" width="76" height="52" rx="5" fill="#1e293b"/><rect x="27" y="15" width="66" height="42" rx="2" fill="var(--a)"/><path d="M8 66h104l-8 11H16z" fill="#cbd5e1"/><rect x="48" y="68" width="24" height="3" rx="1.5" fill="#1e293b" opacity=".4"/></symbol>
-    <symbol id="tower" viewBox="0 0 120 90"><rect x="36" y="6" width="48" height="78" rx="6" fill="#1e293b"/><rect x="42" y="14" width="36" height="5" rx="2" fill="var(--a)"/><path d="M44 28h32M44 35h32M44 42h32" stroke="#cbd5e1" stroke-width="2.5" opacity=".5"/><circle cx="60" cy="62" r="10" fill="none" stroke="var(--a)" stroke-width="4"/><circle cx="60" cy="62" r="2.5" fill="var(--a)"/></symbol>
-    <symbol id="monitor" viewBox="0 0 120 90"><rect x="10" y="10" width="100" height="58" rx="5" fill="#1e293b"/><rect x="15" y="15" width="90" height="48" rx="2" fill="var(--a)"/><rect x="54" y="68" width="12" height="12" fill="#cbd5e1"/><rect x="38" y="80" width="44" height="5" rx="2.5" fill="#cbd5e1"/></symbol>
-    <symbol id="keyboard" viewBox="0 0 120 90"><rect x="6" y="24" width="108" height="44" rx="7" fill="#1e293b"/><path d="M16 36h88M16 47h88M16 58h88" stroke="var(--a)" stroke-width="6" stroke-dasharray="8 3.5"/><rect x="36" y="56" width="48" height="4" rx="2" fill="#cbd5e1"/></symbol>
-    <symbol id="mouse" viewBox="0 0 120 90"><rect x="39" y="8" width="42" height="74" rx="21" fill="#1e293b"/><path d="M60 10v26M39 36h42" stroke="#cbd5e1" stroke-width="2.5" opacity=".6"/><rect x="57" y="18" width="6" height="12" rx="3" fill="var(--a)"/></symbol>
-    <symbol id="printer" viewBox="0 0 120 90"><rect x="32" y="8" width="56" height="26" rx="2" fill="#cbd5e1"/><rect x="12" y="30" width="96" height="38" rx="7" fill="#1e293b"/><rect x="28" y="56" width="64" height="28" rx="2" fill="#fff"/><path d="M36 64h48M36 71h36M36 78h42" stroke="var(--a)" stroke-width="2.5"/><circle cx="96" cy="42" r="3.5" fill="var(--a)"/></symbol>
-    <symbol id="hdd" viewBox="0 0 120 90"><rect x="20" y="16" width="80" height="58" rx="9" fill="#1e293b"/><circle cx="56" cy="45" r="19" fill="none" stroke="#cbd5e1" stroke-width="3" opacity=".6"/><circle cx="56" cy="45" r="5" fill="var(--a)"/><path d="M60 45l18-12" stroke="var(--a)" stroke-width="3"/><circle cx="90" cy="64" r="3" fill="var(--a)"/></symbol>
-    <symbol id="ssd" viewBox="0 0 120 90"><rect x="26" y="22" width="68" height="46" rx="7" fill="#1e293b"/><rect x="34" y="30" width="26" height="18" rx="2" fill="var(--a)"/><path d="M34 58h52" stroke="#cbd5e1" stroke-width="3" opacity=".6"/><path d="M70 32h16M70 40h16" stroke="#cbd5e1" stroke-width="2.5" opacity=".5"/></symbol>
-    <symbol id="headset" viewBox="0 0 120 90"><path d="M30 54a30 30 0 0 1 60 0" fill="none" stroke="#1e293b" stroke-width="7"/><rect x="20" y="48" width="20" height="30" rx="8" fill="var(--a)"/><rect x="80" y="48" width="20" height="30" rx="8" fill="var(--a)"/><path d="M40 74q8 10 22 10" fill="none" stroke="#1e293b" stroke-width="4"/><circle cx="64" cy="84" r="4" fill="#1e293b"/></symbol>
-    <symbol id="webcam" viewBox="0 0 120 90"><circle cx="60" cy="38" r="30" fill="#1e293b"/><circle cx="60" cy="38" r="19" fill="#cbd5e1"/><circle cx="60" cy="38" r="11" fill="var(--a)"/><circle cx="56" cy="34" r="3" fill="#fff" opacity=".7"/><rect x="50" y="68" width="20" height="8" fill="#1e293b"/><rect x="36" y="76" width="48" height="6" rx="3" fill="#1e293b"/></symbol>
-  </svg>
-
-  <!-- Top Bar -->
-  <div class="topbar">
-    <div class="topbar-in">
-      <span><span class="dot"></span> <strong>FREE 24H EXPRESS DELIVERY</strong> on all orders over €100</span>
-      <div class="topbar-badges">
-        <span>✓ Official Hardware Retailer &amp; Supplier</span>
-        <span>✓ 3-Year Official Warranty</span>
-        <span>✓ 30-Day Money Back</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Main Sticky Header -->
-  <header>
-    <div class="header-in">
-      <a class="logo" href="#home">
-        <div class="logo-badge">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5l16 14V5"/></svg>
+  <div class="app-container">
+    <!-- Cabecera Principal -->
+    <header class="top-header">
+      <div class="brand">
+        <div class="brand-logo">⚡</div>
+        <div>
+          <h1>HabitFlow <span>Pro</span></h1>
+          <p class="subtitle">Seguimiento diario, calendario histórico y rachas</p>
         </div>
-        <div>Tech<span>Nova</span></div>
-      </a>
-
-      <div class="search-wrap">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        <input type="search" id="searchInput" placeholder="Search computers, RTX 4070, 4K monitors, peripherals...">
       </div>
 
-      <nav>
-        <a href="#products">Catalogue</a>
-        <a href="#customers">Customer Advisor</a>
-        <a href="#promo">School Pack</a>
-      </nav>
+      <!-- Navegador de Fecha Activa -->
+      <div class="date-navigator">
+        <button id="prevDayBtn" class="btn-icon" title="Día anterior">◀</button>
+        <div class="current-date-display">
+          <span id="selectedDateLabel" class="date-title">Cargando fecha...</span>
+          <span id="selectedDateBadge" class="date-badge">HOY</span>
+        </div>
+        <button id="nextDayBtn" class="btn-icon" title="Día siguiente">▶</button>
+        <button id="todayBtn" class="btn-secondary btn-sm">Ir a Hoy</button>
+      </div>
 
+      <!-- Acciones Globales y Backup -->
       <div class="header-actions">
-        <button type="button" class="icon-btn" id="themeBtn" aria-label="Toggle color theme">
-          <span id="themeIcon">🌙</span>
+        <button id="exportBtn" class="btn-secondary" title="Descargar copia de seguridad JSON">
+          ⬇ Exportar
         </button>
-        <button type="button" class="icon-btn" id="cartBtn">
-          🛒 Cart <span class="cart-count" id="cartCount">0</span>
+        <label for="importInput" class="btn-secondary import-label" title="Restaurar copia de seguridad JSON">
+          ⬆ Importar
+          <input type="file" id="importInput" accept=".json" hidden>
+        </label>
+        <button id="openModalBtn" class="btn-primary">
+          + Nuevo Hábito
         </button>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <!-- Hero Section -->
-  <div class="hero" id="home">
-    <div class="hero-in">
-      <div>
-        <div class="hero-tag">⚡ Leading Computer Retailer &amp; Hardware Supplier</div>
-        <h1>Next-Gen Hardware for <span>Every Budget &amp; Goal</span></h1>
-        <p>Explore our certified catalogue of high-performance computers, professional monitors, and precision peripherals tailored for students, designers, and serious gamers.</p>
-        <div class="hero-btns">
-          <a class="btn-primary" href="#products">Browse Full Catalogue →</a>
-          <a class="btn-hot" href="#promo">🎒 Back-to-School Pack (€499)</a>
+    <!-- Tarjetas de KPIs -->
+    <section class="kpi-grid">
+      <article class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-title">Día Seleccionado</span>
+          <span class="kpi-icon">🎯</span>
         </div>
-        <div class="hero-stats">
-          <div>
-            <div class="stat-num">18+</div>
-            <div class="stat-lbl">Certified Products</div>
-          </div>
-          <div>
-            <div class="stat-num">24h</div>
-            <div class="stat-lbl">Fast Dispatch</div>
-          </div>
-          <div>
-            <div class="stat-num">4.9★</div>
-            <div class="stat-lbl">Customer Rating</div>
-          </div>
+        <div class="kpi-value" id="kpiDayCount">0 / 0</div>
+        <div class="kpi-progress-bar">
+          <div class="kpi-progress-fill" id="kpiDayBar"></div>
         </div>
+        <span class="kpi-foot" id="kpiDayPercent">0% completado en esta fecha</span>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-title">Rendimiento Semanal</span>
+          <span class="kpi-icon">📊</span>
+        </div>
+        <div class="kpi-value" id="kpiWeekPercent">0%</div>
+        <div class="kpi-progress-bar">
+          <div class="kpi-progress-fill accent-cyan" id="kpiWeekBar"></div>
+        </div>
+        <span class="kpi-foot" id="kpiWeekSummary">0 objetivos cumplidos esta semana</span>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-title">Mejor Racha Activa</span>
+          <span class="kpi-icon">🔥</span>
+        </div>
+        <div class="kpi-value" id="kpiBestStreak">0 días</div>
+        <span class="kpi-foot" id="kpiBestHabitName">Sin racha activa aún</span>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-title">Días Perfectos (Mes)</span>
+          <span class="kpi-icon">🏆</span>
+        </div>
+        <div class="kpi-value" id="kpiPerfectDays">0</div>
+        <span class="kpi-foot" id="kpiMonthLabel">Días al 100% en el mes visible</span>
+      </article>
+    </section>
+
+    <!-- Layout Principal en 2 Columnas -->
+    <main class="dashboard-grid">
+      <!-- Columna Izquierda: Hábitos + Gráfico Semanal -->
+      <div class="main-column">
+        <!-- Panel de Hábitos y Cuadrícula Semanal -->
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Registro de Objetivos</h2>
+              <p class="panel-subtitle" id="weekRangeLabel">Semana actual</p>
+            </div>
+
+            <div class="filters-bar">
+              <input
+                type="text"
+                id="searchInput"
+                class="input-search"
+                placeholder="Buscar hábito..."
+              >
+              <select id="categoryFilter" class="select-filter">
+                <option value="all">Todas las categorías</option>
+                <option value="Fitness">Fitness</option>
+                <option value="Código">Código / Estudio</option>
+                <option value="Música">Música</option>
+                <option value="Salud">Salud</option>
+                <option value="Personal">Personal</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="habits-table-wrapper">
+            <table class="habits-table">
+              <thead>
+                <tr id="weekTableHeader">
+                  <!-- Se genera dinámicamente con JS -->
+                </tr>
+              </thead>
+              <tbody id="habitsTableBody">
+                <!-- Filas generadas con JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Panel del Gráfico Semanal -->
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Evolución de la Semana</h2>
+              <p class="panel-subtitle">Porcentaje de objetivos diarios completados (Lunes a Domingo)</p>
+            </div>
+            <div class="chart-toggle">
+              <button id="chartBarBtn" class="toggle-btn active">Barras</button>
+              <button id="chartLineBtn" class="toggle-btn">Curva</button>
+            </div>
+          </div>
+
+          <div id="weeklyChartContainer" class="chart-container">
+            <!-- Gráfico renderizado con JS -->
+          </div>
+        </section>
       </div>
 
-      <div class="hero-showcase">
-        <img src="https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=900&q=80" alt="High performance desktop computer setup">
-        <div class="floating-card">
-          <div>
-            <div style="font-size:12px;color:#5eead4;font-weight:700">BESTSELLER WORKSTATION</div>
-            <div style="font-weight:700;font-size:15px">NovaPlay Gamer · RTX 4070</div>
+      <!-- Columna Derecha: Calendario Mensual + Ranking de Rachas -->
+      <aside class="side-column">
+        <!-- Calendario Interactivo -->
+        <section class="panel">
+          <div class="calendar-header">
+            <div>
+              <h2>Calendario</h2>
+              <p class="panel-subtitle">Haz clic en un día para inspeccionar o editar</p>
+            </div>
+            <div class="calendar-nav">
+              <button id="prevMonthBtn" class="btn-icon" title="Mes anterior">◀</button>
+              <span id="calendarMonthTitle" class="calendar-month-title">Octubre 2026</span>
+              <button id="nextMonthBtn" class="btn-icon" title="Mes siguiente">▶</button>
+            </div>
           </div>
-          <span style="font-family:'JetBrains Mono',monospace;font-weight:800;font-size:20px;color:#fbbf24">€1,599</span>
-        </div>
+
+          <div class="calendar-weekdays">
+            <span>L</span>
+            <span>M</span>
+            <span>X</span>
+            <span>J</span>
+            <span>V</span>
+            <span>S</span>
+            <span>D</span>
+          </div>
+
+          <div id="calendarGrid" class="calendar-grid">
+            <!-- Días del mes generados con JS -->
+          </div>
+
+          <div class="calendar-legend">
+            <div class="legend-item">
+              <span class="legend-dot empty"></span> Sin registros
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot partial"></span> Parcial
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot complete"></span> 100% Completado
+            </div>
+          </div>
+        </section>
+
+        <!-- Estado de Rachas por Hábito -->
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Rachas por Hábito</h2>
+              <p class="panel-subtitle">Días consecutivos hasta hoy vs Récord</p>
+            </div>
+          </div>
+          <div id="streaksList" class="streaks-list">
+            <!-- Lista de rachas generada con JS -->
+          </div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <!-- Modal para Crear / Editar Hábito -->
+  <div id="habitModal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalTitle">Nuevo Hábito</h3>
+        <button id="closeModalBtn" class="btn-icon">✕</button>
       </div>
+
+      <form id="habitForm">
+        <input type="hidden" id="habitIdInput">
+
+        <div class="form-group">
+          <label for="habitNameInput">Nombre del objetivo diario</label>
+          <input
+            type="text"
+            id="habitNameInput"
+            placeholder="Ej. Entrenamiento de fuerza, Practicar piano..."
+            required
+            maxlength="55"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="habitCategoryInput">Categoría</label>
+          <select id="habitCategoryInput">
+            <option value="Fitness">Fitness</option>
+            <option value="Código">Código / Estudio</option>
+            <option value="Música">Música</option>
+            <option value="Salud">Salud</option>
+            <option value="Personal">Personal</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Icono</label>
+          <div id="iconPicker" class="picker-grid">
+            <!-- Opciones de icono generadas por JS -->
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Color identificativo</label>
+          <div id="colorPicker" class="picker-grid">
+            <!-- Opciones de color generadas por JS -->
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="cancelModalBtn" class="btn-secondary">Cancelar</button>
+          <button type="submit" class="btn-primary">Guardar Hábito</button>
+        </div>
+      </form>
     </div>
   </div>
 
-  <main class="in">
-    <!-- Step 1: Product Catalogue -->
-    <section id="products">
-      <div class="sec-head">
-        <div>
-          <span class="sec-tag">Step 1 · Official Store Catalogue</span>
-          <h2>Hardware &amp; Peripherals Catalogue</h2>
-        </div>
-        <p style="color:var(--mute);font-size:14px">Compare specifications, features, and affordable prices across 7 categories.</p>
-      </div>
+  <!-- Notificación Toast -->
+  <div id="toast" class="toast hidden">Datos guardados</div>
 
-      <div class="controls-bar">
-        <div class="filters" id="filters"></div>
-        <select class="sort-select" id="sortSelect" aria-label="Sort products">
-          <option value="default">Sort by: Featured</option>
-          <option value="asc">Price: Low to High (Cheap first)</option>
-          <option value="desc">Price: High to Low (Expensive first)</option>
-        </select>
-      </div>
-
-      <div class="grid" id="grid"></div>
-    </section>
-
-    <!-- Step 2 & 3: Customer Profiles & Recommendations -->
-    <section id="customers">
-      <div class="sec-head">
-        <div>
-          <span class="sec-tag">Steps 2 &amp; 3 · Personalised Sales Advisor</span>
-          <h2>Which Product Is Right for Me?</h2>
-        </div>
-        <p style="color:var(--mute);font-size:14px">Tailored hardware recommendations based on each customer profile and budget.</p>
-      </div>
-      <div class="cards" id="cards"></div>
-    </section>
-
-    <!-- Challenge: Special Promotion -->
-    <section id="promo">
-      <div class="promo" id="pack"></div>
-    </section>
-  </main>
-
-  <!-- Slide-out Shopping Cart -->
-  <div class="cart-overlay" id="cartOverlay">
-    <div class="cart-drawer">
-      <div class="cart-head">
-        <h3>Your Shopping Cart</h3>
-        <button type="button" class="icon-btn" id="closeCart">✕</button>
-      </div>
-      <div class="cart-items" id="cartItems"></div>
-      <div class="cart-foot">
-        <div style="display:flex;justify-content:space-between;margin-bottom:14px;font-weight:800;font-size:18px">
-          <span>Total (VAT Included):</span>
-          <span id="cartTotal" style="font-family:'JetBrains Mono',monospace;color:var(--acc)">€0</span>
-        </div>
-        <button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="alert('Thank you for shopping at TechNova! Your order has been placed.')">
-          Proceed to Checkout →
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Realistic Store Footer -->
-  <footer>
-    <div class="footer-in">
-      <div class="footer-col">
-        <h4>TechNova Computer Store</h4>
-        <p style="line-height:1.6">Your trusted computer retailer and official hardware supplier. Providing affordable student laptops, powerful creator workstations, and extreme gaming rigs.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Catalogue Categories</h4>
-        <ul>
-          <li>Desktops &amp; Laptops (3)</li>
-          <li>Monitors &amp; Displays (3)</li>
-          <li>Keyboards &amp; Mice (6)</li>
-          <li>Printers, Storage &amp; Peripherals (6)</li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Customer Guarantees</h4>
-        <ul>
-          <li>Free Delivery over €100</li>
-          <li>3-Year Hardware Warranty</li>
-          <li>Expert Technical Support</li>
-          <li>Back-to-School Special Discounts</li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 TechNova Store · Unit 3 English Project</span>
-      <span>Prices include 21% VAT · Official Hardware Catalogue</span>
-    </div>
-  </footer>
-
-  <script>
-    // Catalogue
+  <script type="module" src="app.js"></script>
+</body>
+</html>
