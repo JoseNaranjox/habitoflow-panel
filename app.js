@@ -11,40 +11,35 @@ import {
 // 1. CONFIGURACIÓN DE FIREBASE Y CLAVE DE SINCRONIZACIÓN
 // ============================================================================
 const firebaseConfig = {
-  apiKey: 'TU_API_KEY',
-  authDomain: 'tu-proyecto.firebaseapp.com',
-  projectId: 'tu-proyecto',
-  storageBucket: 'tu-proyecto.appspot.com',
-  messagingSenderId: '123456789',
-  appId: '1:123456789:web:abcdef'
+  apiKey: 'AIzaSyDTb2m8r_c_kbMROL52i8rNg48yIw7QSys',
+  authDomain: 'habitflow-pro-5f8a7.firebaseapp.com',
+  projectId: 'habitflow-pro-5f8a7',
+  storageBucket: 'habitflow-pro-5f8a7.firebasestorage.app',
+  messagingSenderId: '403039279766',
+  appId: '1:403039279766:web:bc91ab99fb85cfc9fdc0b7',
+  measurementId: 'G-PRGZMM6EN1'
 };
 
-// Cambia este identificador por uno secreto tuyo (debe ser el mismo en todos tus dispositivos)
+// Pide tu clave secreta la primera vez que entras en un dispositivo y la guarda en ese navegador
 let USER_SYNC_ID = localStorage.getItem('habitflow_sync_key');
 if (!USER_SYNC_ID) {
-  USER_SYNC_ID = prompt('Introduce tu clave secreta de sincronización:');
-  if (USER_SYNC_ID) {
-    localStorage.setItem('habitflow_sync_key', USER_SYNC_ID.trim());
-  }
+  const inputKey = prompt(
+    'Introduce tu clave personal para sincronizar tus hábitos entre dispositivos:'
+  );
+  USER_SYNC_ID = inputKey && inputKey.trim() ? inputKey.trim() : 'usuario_principal';
+  localStorage.setItem('habitflow_sync_key', USER_SYNC_ID);
 }
-
-// Comprobación automática de si Firebase ya está configurado con tus datos reales
-const isCloudEnabled =
-  firebaseConfig.apiKey !== 'TU_API_KEY' &&
-  firebaseConfig.projectId !== 'tu-proyecto';
 
 let db = null;
 let cloudDocRef = null;
 let isApplyingRemoteUpdate = false;
 
-if (isCloudEnabled) {
-  try {
-    const app = initializeApp(firebaseConfig);
-    db = getFirestore(app);
-    cloudDocRef = doc(db, 'habitflow_users', USER_SYNC_ID);
-  } catch (err) {
-    console.error('Error al inicializar Firebase:', err);
-  }
+try {
+  const app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+  cloudDocRef = doc(db, 'habitflow_users', USER_SYNC_ID);
+} catch (err) {
+  console.error('Error al inicializar Firebase:', err);
 }
 
 // ============================================================================
@@ -182,11 +177,9 @@ async function loadState() {
 
   renderAll();
 
-  // 2. Si Firebase está configurado, sincronizar con la nube y escuchar en vivo
-  if (!isCloudEnabled || !cloudDocRef) {
-    return;
-  }
+  if (!cloudDocRef) return;
 
+  // 2. Sincronizar con Firebase Firestore
   try {
     const snap = await getDoc(cloudDocRef);
     if (snap.exists()) {
@@ -200,7 +193,6 @@ async function loadState() {
       renderAll();
       showToast('☁️ Sincronizado con la nube');
     } else {
-      // Primera vez en la nube: subimos los datos locales actuales
       await saveState(false);
     }
 
@@ -217,8 +209,8 @@ async function loadState() {
       renderAll();
     });
   } catch (err) {
-    console.error('Modo sin conexión o error de Firebase, usando copia local:', err);
-    showToast('⚠️ Modo offline (usando copia local)');
+    console.error('Error al conectar con Firestore:', err);
+    showToast('⚠️ Usando copia local (revisa las Reglas de Firestore si persiste)');
   }
 }
 
@@ -229,18 +221,13 @@ async function saveState(notify = true) {
     updatedAt: new Date().toISOString()
   };
 
-  // Guardado instantáneo en el navegador
   localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
 
-  // Si Firebase no está configurado aún, solo notificamos guardado local
-  if (!isCloudEnabled || !cloudDocRef) {
-    if (notify) {
-      showToast('✓ Guardado en local');
-    }
+  if (!cloudDocRef) {
+    if (notify) showToast('✓ Guardado en local');
     return;
   }
 
-  // Subir a Firebase Firestore
   try {
     isApplyingRemoteUpdate = true;
     await setDoc(cloudDocRef, payload);
@@ -250,7 +237,7 @@ async function saveState(notify = true) {
   } catch (err) {
     console.error('Error al subir a Firebase:', err);
     if (notify) {
-      showToast('⚠️ Guardado en local (sin conexión)');
+      showToast('⚠️ Guardado en local (sin conexión a nube)');
     }
   } finally {
     setTimeout(() => {
