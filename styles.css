@@ -861,3 +861,57 @@ button, .import-label {
     grid-template-columns: 1fr;
   }
 }
+
+/* Ajustes específicos para iPhone y pantallas móviles */
+@media (max-width: 640px) {
+  body {
+    padding: 12px;
+    padding-top: calc(14px + env(safe-area-inset-top));
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+
+  .top-header {
+    padding: 14px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .date-navigator {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .current-date-display {
+    min-width: auto;
+  }
+
+  .header-actions {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .header-actions button,
+  .header-actions .import-label {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .kpi-card {
+    padding: 14px;
+  }
+
+  .kpi-value {
+    font-size: 1.35rem;
+  }
+
+  .panel {
+    padding: 16px;
+  }
+}
