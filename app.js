@@ -851,6 +851,24 @@ function initApp() {
 
   document.getElementById('prevDayBtn').addEventListener('click', () => {
     selectDate(addDays(state.selectedDate, -1));
+
+  const headerActions = document.querySelector('.header-actions');
+  if (headerActions) {
+    const keyBtn = document.createElement('button');
+    keyBtn.className = 'btn-secondary';
+    keyBtn.title = `Clave activa: ${USER_SYNC_ID}`;
+    keyBtn.textContent = '🔑 Clave';
+    keyBtn.addEventListener('click', () => {
+      const newKey = prompt(
+        'Introduce tu clave personal de sincronización:',
+        USER_SYNC_ID
+      );
+      if (newKey && newKey.trim()) {
+        localStorage.setItem('habitflow_sync_key', newKey.trim());
+        location.reload();
+      }
+    });
+    headerActions.prepend(keyBtn);
   });
 
   document.getElementById('nextDayBtn').addEventListener('click', () => {
